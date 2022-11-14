@@ -11,6 +11,7 @@ import {
   Center,
   ActionIcon,
   Notification,
+  Container,
 } from '@mantine/core';
 import { DateTime } from 'luxon';
 import { BASE_URL } from '../Config';
@@ -68,6 +69,9 @@ export default function Events() {
       const response = await result.json();
       if (response.code === 200) {
         setEvents(events.filter((e) => e.id !== event.id));
+        hashedEvents[event.start.getDate()] = hashedEvents[
+          event.start.getDate()
+        ].filter((e) => e.id !== event.id);
       }
     } finally {
       setRemoving(false);
@@ -124,16 +128,18 @@ export default function Events() {
         opened={opened}
       >
         {removing && (
-          <Notification loading title="Removing event" disallowClose>
+          <Notification loading title="Removing event">
             Please wait until data is removed.
           </Notification>
         )}
-        <>
+        <Container>
           <Title align="center" order={3} mb={15}>
             Events on this day
           </Title>
           <div>
-            {(value?.getDate() == null ||
+            {(value == null ||
+              value?.getDate() == null ||
+              hashedEvents == null ||
               hashedEvents[value?.getDate()].length == 0) && (
               <Title align="center" order={5} mb={15}>
                 No events found
@@ -182,7 +188,7 @@ export default function Events() {
               ))
             }
           </div>
-        </>
+        </Container>
       </Drawer>
       <Calendar
         value={value}
