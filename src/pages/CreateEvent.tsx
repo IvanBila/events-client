@@ -16,13 +16,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { IconArrowLeft } from '@tabler/icons';
-
-interface FormBody {
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-}
+import { BASE_URL } from '../Config';
+import { FormBody } from '../Models';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -47,7 +42,7 @@ const useStyles = createStyles((theme) => ({
 export default function CreateEvent() {
   const { classes } = useStyles();
   const [isLoading, setIsLoading] = useState(false);
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const form = useForm({
     initialValues: {
@@ -77,7 +72,7 @@ export default function CreateEvent() {
   const createEvent = async (formData: FormBody) => {
     try {
       setIsLoading(true);
-      const result = await fetch('http://localhost:8080/event', {
+      const result = await fetch(`${BASE_URL}/event`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +83,6 @@ export default function CreateEvent() {
       if (response.code === 201) {
         navigate('/');
       }
-    } catch (error) {
     } finally {
       setIsLoading(false);
     }

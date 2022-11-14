@@ -1,29 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import { Outlet } from 'react-router-dom';
 import reportWebVitals from './reportWebVitals';
-import { MantineProvider } from '@mantine/core';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import CreateEvent from './pages/CreateEvent';
+import Events from './pages/Events';
+import NotFound from './pages/NotFound';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+const links = [
+  {
+    link: '/sign-in',
+    label: 'Sign in',
+  },
+];
 root.render(
-  <MantineProvider
-    theme={{
-      fontFamily: 'inter, sans-serif',
-      colorScheme: 'light',
-    }}
-    withGlobalStyles
-    withNormalizeCSS
-  >
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </MantineProvider>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home links={links} />} />
+      <Route path="/create-event" element={<CreateEvent />} />
+      <Route path="/events" element={<Events />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </BrowserRouter>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

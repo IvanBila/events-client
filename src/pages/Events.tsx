@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 //@ts-ignore
 import { Calendar } from '@mantine/dates';
 import { IconPencil, IconTrash, IconDots } from '@tabler/icons';
@@ -10,9 +10,13 @@ import {
   Text,
   Center,
   ActionIcon,
+  Notification,
 } from '@mantine/core';
 import { DateTime } from 'luxon';
+import { BASE_URL } from '../Config';
+import { Event, HashedEvents } from '../Models';
 import { createStyles, Group, Menu } from '@mantine/core';
+
 const useStyles = createStyles((theme) => ({
   card: {
     backgroundColor:
@@ -42,32 +46,52 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-interface Event {
-  id: number;
-  title: string;
-  description: string;
-  start: Date;
-  end: Date;
-}
-
-interface HashedEvents {
-  [key: string]: Event[];
-}
-
 export default function Events() {
   const [value, setValue] = useState<Date | null>(new Date());
   const [events, setEvents] = useState<Event[]>([]);
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [hashedEvents, setHashedEvents] = useState<HashedEvents>({});
+  const [removing, setRemoving] = useState(false);
+  const [editing, setEditing] = useState(false);
   const { classes } = useStyles();
 
-  const remove = () => {};
+  const remove = async (event: Event) => {
+    setRemoving(true);
+    try {
+      const result = await fetch(`${BASE_URL}/event/${event.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const response = await result.json();
+      if (response.code === 200) {
+        setEvents(events.filter((e) => e.id !== event.id));
+      }
+    } finally {
+      setRemoving(false);
+    }
+  };
 
-  const edit = () => {};
+  const edit = async (event: Event) => {
+    try {
+      setEditing(true);
+      const result = await fetch(`${BASE_URL}/event/${event.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(event),
+      });
+      const response = await result.json();
+    } finally {
+      setEditing(false);
+    }
+  };
 
   useEffect(() => {
-    fetch('http://localhost:8080/events')
+    fetch(`${BASE_URL}/events`)
       .then((response) => response.json())
       .then((response) => {
         if (response.code === 200) {
@@ -99,14 +123,25 @@ export default function Events() {
         }}
         opened={opened}
       >
+        {removing && (
+          <Notification loading title="Removing event" disallowClose>
+            Please wait until data is removed.
+          </Notification>
+        )}
         <>
           <Title align="center" order={3} mb={15}>
             Events on this day
           </Title>
           <div>
+            {(value?.getDate() == null ||
+              hashedEvents[value?.getDate()].length == 0) && (
+              <Title align="center" order={5} mb={15}>
+                No events found
+              </Title>
+            )}
             {
               //@ts-ignore
-              hashedEvents[value?.getDate()].map((event) => (
+              hashedEvents[value?.getDate()]?.map((event) => (
                 <Center key={event.id}>
                   <Group
                     position="apart"
@@ -128,7 +163,7 @@ export default function Events() {
                       </Menu.Target>
                       <Menu.Dropdown>
                         <Menu.Item
-                          onClick={edit}
+                          onClick={() => edit(event)}
                           icon={<IconPencil size={16} stroke={1.5} />}
                         >
                           Edit
@@ -136,7 +171,7 @@ export default function Events() {
                         <Menu.Item
                           icon={<IconTrash size={16} stroke={1.5} />}
                           color="red"
-                          onClick={remove}
+                          onClick={() => remove(event)}
                         >
                           Delete
                         </Menu.Item>
@@ -151,7 +186,6 @@ export default function Events() {
       </Drawer>
       <Calendar
         value={value}
-        onMonthChange={(date) => {}}
         onChange={(value: Date) => {
           setValue(value);
           setOpened(true);
