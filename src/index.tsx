@@ -6,7 +6,6 @@ import Home from './pages/Home';
 import CreateEvent from './pages/CreateEvent';
 import Events from './pages/Events';
 import NotFound from './pages/NotFound';
-import { links } from './Config';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -14,7 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Home links={links} />} />
+      <Route path="/" element={<Home />} />
       <Route path="/create-event" element={<CreateEvent />} />
       <Route path="/events" element={<Events />} />
       <Route path="*" element={<NotFound />} />
