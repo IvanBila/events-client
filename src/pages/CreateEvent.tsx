@@ -52,7 +52,7 @@ export default function CreateEvent() {
   const createEvent = async (formData: FormBody) => {
     try {
       setIsLoading(true);
-      const result = await fetch(`${BASE_URL}/event`, {
+      const result = await fetch(`${BASE_URL}/events`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

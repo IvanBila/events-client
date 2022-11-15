@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, DatePicker } from '@mantine/dates';
-import { IconPencil, IconTrash, IconDots } from '@tabler/icons';
 import {
   Indicator,
   Title,
   Drawer,
   useMantineTheme,
   Text,
-  Center,
-  ActionIcon,
   Notification,
   Container,
   Modal,
-  Group,
-  Menu,
   Stack,
   TextInput,
   Textarea,
@@ -65,7 +60,7 @@ export default function Events() {
   const remove = async (event: Event) => {
     setRemoving(true);
     try {
-      const result = await fetch(`${BASE_URL}/event/${event.id}`, {
+      const result = await fetch(`${BASE_URL}/events/${event.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +87,7 @@ export default function Events() {
   const updateEvent = async (formData: FormBody) => {
     try {
       setLoading(true);
-      const result = await fetch(`${BASE_URL}/event`, {
+      const result = await fetch(`${BASE_URL}/events`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
