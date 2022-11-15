@@ -1,5 +1,4 @@
 import {
-  createStyles,
   TextInput,
   Container,
   Stack,
@@ -18,29 +17,10 @@ import { useNavigate } from 'react-router-dom';
 import { IconArrowLeft } from '@tabler/icons';
 import { BASE_URL } from '../Config';
 import { FormBody } from '../Models';
-
-const useStyles = createStyles((theme) => ({
-  root: {
-    position: 'relative',
-  },
-
-  input: {
-    height: 'auto',
-    paddingTop: 18,
-  },
-
-  label: {
-    position: 'absolute',
-    pointerEvents: 'none',
-    fontSize: theme.fontSizes.xs,
-    paddingLeft: theme.spacing.sm,
-    paddingTop: theme.spacing.sm / 2,
-    zIndex: 1,
-  },
-}));
+import { useCreateEventStyles } from '../Styles';
 
 export default function CreateEvent() {
-  const { classes } = useStyles();
+  const { classes } = useCreateEventStyles();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
