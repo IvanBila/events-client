@@ -10,47 +10,13 @@ import {
   Title,
   Accordion,
   Group,
+  Text,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import styled from 'styled-components';
-// @ts-ignore
 import { IconChevronRight } from '@tabler/icons';
 import { Link } from 'react-router-dom';
-import {
-  IconGauge,
-  IconCookie,
-  IconUser,
-  IconMessage2,
-  IconLock,
-  TablerIcon,
-} from '@tabler/icons';
 import { HomeLinks } from '../Models';
-
-const Headline = styled.h1`
-  font-size: 4em;
-  font-weight: bold;
-  font-family: Inter, Lexend, ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans,
-    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
-    Noto Color Emoji;
-  line-height: 1.2;
-  max-width: 48rem;
-  text-align: center;
-  margin-bottom: 0.2em;
-`;
-
-const HeadLineDescription = styled.p`
-  color: rgb(51, 65, 85);
-  text-align: center;
-  font-size: 1.125rem;
-  max-width: 35rem;
-  margin: 0 auto;
-  font-family: Inter, sans-serif;
-`;
-
-const InsideText = styled.span`
-  color: rgb(34, 139, 230);
-`;
+import { faq } from '../Config';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -101,7 +67,17 @@ const useStyles = createStyles((theme) => ({
     paddingBottom: theme.spacing.xl * 2,
     minHeight: 650,
   },
-
+  insideText: {
+    display: 'inline-block',
+    color: '#228be6',
+  },
+  headlineDescription: {
+    color: 'rgb(51, 65, 85)',
+    textAlign: 'center',
+    fontSize: '1.125rem',
+    maxWidth: '35rem',
+    margin: '0 auto',
+  },
   title: {
     marginBottom: theme.spacing.xl * 1.5,
   },
@@ -181,13 +157,16 @@ export default function Home({ links }: HomeLinks) {
       </Header>
       <Center>
         <Stack>
-          <Headline>
-            An event manager to <InsideText>rule them all</InsideText>
-          </Headline>
-          <HeadLineDescription>
+          <Title size={50}>
+            An event manager to{' '}
+            <Text className={classes.insideText} size={50}>
+              rule them all
+            </Text>
+          </Title>
+          <Text className={classes.headlineDescription}>
             A collection of tools that empower you to create, manage and grow
             your events.
-          </HeadLineDescription>
+          </Text>
           <Group sx={{ margin: '0 auto' }}>
             <Link to="/create-event">
               <Button
@@ -209,37 +188,26 @@ export default function Home({ links }: HomeLinks) {
               </Button>
             </Link>
           </Group>
-          <Container size="sm" className={classes.wrapper}>
-            <Title align="center" className={classes.title}>
-              Frequently Asked Questions
-            </Title>
-
-            <Accordion variant="separated">
-              <Accordion.Item className={classes.item} value="reset-password">
-                <Accordion.Control>How Can I add events?</Accordion.Control>
-                <Accordion.Panel>
-                  You can click the create event button or access /create-event
-                </Accordion.Panel>
-              </Accordion.Item>
-
-              <Accordion.Item className={classes.item} value="another-account">
-                <Accordion.Control>Is the product paid?</Accordion.Control>
-                <Accordion.Panel>
-                  For the beta phase the app is free and will remain so until
-                  further notice
-                </Accordion.Panel>
-              </Accordion.Item>
-
-              <Accordion.Item className={classes.item} value="another-account">
-                <Accordion.Control>
-                  Can I send invites to other users?
-                </Accordion.Control>
-                <Accordion.Panel>
-                  For the time being you can only send invites to your own email
-                </Accordion.Panel>
-              </Accordion.Item>
-            </Accordion>
-          </Container>
+          {faq && faq.length > 0 && (
+            <Container size="sm" className={classes.wrapper}>
+              <Title align="center" className={classes.title}>
+                Frequently Asked Questions
+              </Title>
+              <Accordion variant="separated">
+                {faq &&
+                  faq.map(({ key, title, description }) => (
+                    <Accordion.Item
+                      key={key}
+                      className={classes.item}
+                      value={key}
+                    >
+                      <Accordion.Control>{title}</Accordion.Control>
+                      <Accordion.Panel>{description}</Accordion.Panel>
+                    </Accordion.Item>
+                  ))}
+              </Accordion>
+            </Container>
+          )}
         </Stack>
       </Center>
     </>

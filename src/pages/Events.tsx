@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 //@ts-ignore
-import { Calendar } from '@mantine/dates';
+import { Calendar, DatePicker } from '@mantine/dates';
 import { IconPencil, IconTrash, IconDots } from '@tabler/icons';
 import {
   Indicator,
@@ -12,11 +12,20 @@ import {
   ActionIcon,
   Notification,
   Container,
+  Modal,
+  createStyles,
+  Group,
+  Menu,
+  Stack,
+  TextInput,
+  Textarea,
+  Button,
 } from '@mantine/core';
 import { DateTime } from 'luxon';
 import { BASE_URL } from '../Config';
-import { Event, HashedEvents } from '../Models';
-import { createStyles, Group, Menu } from '@mantine/core';
+import { Event, FormBody, HashedEvents } from '../Models';
+import { useNavigate } from 'react-router-dom';
+import { useForm } from '@mantine/form';
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -48,14 +57,40 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function Events() {
-  const [value, setValue] = useState<Date | null>(new Date());
+  const [value, setValue] = useState<Date | null>(null);
   const [events, setEvents] = useState<Event[]>([]);
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
   const [hashedEvents, setHashedEvents] = useState<HashedEvents>({});
   const [removing, setRemoving] = useState(false);
-  const [editing, setEditing] = useState(false);
   const { classes } = useStyles();
+  const [isModalOpened, setIsModalOpened] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm({
+    initialValues: {
+      title: '',
+      description: '',
+      startDate: '',
+      endDate: '',
+    },
+    validate: {
+      title: (value) => {
+        if (!value) return 'Title is required';
+      },
+      description: (value) => {
+        if (!value) return 'Description is required';
+      },
+      startDate: (value) => {
+        if (!value) return 'Start date is required';
+      },
+      endDate: (value) => {
+        if (!value) return 'End date is required';
+        if (value < form.values.startDate)
+          return 'End date cannot be before start date';
+      },
+    },
+  });
 
   const remove = async (event: Event) => {
     setRemoving(true);
@@ -79,18 +114,25 @@ export default function Events() {
   };
 
   const edit = async (event: Event) => {
+    form.setValues(event);
+    setIsModalOpened(true);
+    setOpened(false);
+  };
+
+  const updateEvent = async (formData: FormBody) => {
     try {
-      setEditing(true);
-      const result = await fetch(`${BASE_URL}/event/${event.id}`, {
+      setLoading(true);
+      const result = await fetch(`${BASE_URL}/event`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(event),
+        body: JSON.stringify(formData),
       });
       const response = await result.json();
     } finally {
-      setEditing(false);
+      setLoading(false);
+      setIsModalOpened(false);
     }
   };
 
@@ -113,6 +155,61 @@ export default function Events() {
 
   return (
     <>
+      <Modal
+        opened={isModalOpened}
+        onClose={() => setIsModalOpened(false)}
+        title="Update Event"
+      >
+        <form onSubmit={form.onSubmit((values) => updateEvent(values))}>
+          <Stack>
+            <Text sx={{ fontSize: '14pt', fontWeight: 'bold' }}>
+              Event Details
+            </Text>
+
+            <TextInput
+              label="Title"
+              placeholder="JavaScript Web Performance"
+              classNames={classes}
+              size="md"
+              {...form.getInputProps('title')}
+            />
+
+            <Textarea
+              label="Description"
+              placeholder="Minimizing app size using modern technologies"
+              classNames={classes}
+              size="md"
+              {...form.getInputProps('description')}
+            />
+            <DatePicker
+              label="Start date"
+              placeholder="When will you leave?"
+              classNames={classes}
+              inputFormat="DD/MM/YYYY"
+              allowFreeInput
+              size="md"
+              {...form.getInputProps('startDate')}
+            />
+            <DatePicker
+              label="End date"
+              placeholder="When will you leave?"
+              classNames={classes}
+              inputFormat="DD/MM/YYYY"
+              allowFreeInput
+              size="md"
+              {...form.getInputProps('endDate')}
+            />
+            <Button
+              type="submit"
+              sx={{ maxWidth: '130px' }}
+              size="md"
+              loading={loading}
+            >
+              Update
+            </Button>
+          </Stack>
+        </form>
+      </Modal>
       <Drawer
         overlayColor={
           theme.colorScheme === 'dark'

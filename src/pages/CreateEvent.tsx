@@ -81,7 +81,7 @@ export default function CreateEvent() {
       });
       const response = await result.json();
       if (response.code === 201) {
-        navigate('/');
+        navigate('/events');
       }
     } finally {
       setIsLoading(false);

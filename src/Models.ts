@@ -1,6 +1,3 @@
-import React from 'react';
-import { TablerIcon } from '@tabler/icons';
-
 export interface Event {
   id: number;
   title: string;
@@ -24,14 +21,8 @@ export interface HomeLinks {
   links: { link: string; label: string }[];
 }
 
-export interface FeaturesGridProps {
-  title: React.ReactNode;
-  description: React.ReactNode;
-  data?: FeatureProps[];
-}
-
-export interface FeatureProps {
-  icon: TablerIcon;
-  title: React.ReactNode;
-  description: React.ReactNode;
+export interface Faq {
+  key: string;
+  title: string;
+  description: string;
 }
