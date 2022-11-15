@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-//@ts-ignore
 import { Calendar, DatePicker } from '@mantine/dates';
 import { IconPencil, IconTrash, IconDots } from '@tabler/icons';
 import {
@@ -13,7 +12,6 @@ import {
   Notification,
   Container,
   Modal,
-  createStyles,
   Group,
   Menu,
   Stack,
@@ -24,37 +22,8 @@ import {
 import { DateTime } from 'luxon';
 import { BASE_URL } from '../Config';
 import { Event, FormBody, HashedEvents } from '../Models';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
-
-const useStyles = createStyles((theme) => ({
-  card: {
-    backgroundColor:
-      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-  },
-
-  item: {
-    '& + &': {
-      paddingTop: theme.spacing.sm,
-      marginTop: theme.spacing.sm,
-      borderTop: `1px solid ${
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[4]
-          : theme.colors.gray[2]
-      }`,
-    },
-  },
-
-  switch: {
-    '& *': {
-      cursor: 'pointer',
-    },
-  },
-
-  title: {
-    lineHeight: 1,
-  },
-}));
+import { useEventStyles } from '../Styles';
 
 export default function Events() {
   const [value, setValue] = useState<Date | null>(null);
@@ -63,7 +32,7 @@ export default function Events() {
   const [opened, setOpened] = useState(false);
   const [hashedEvents, setHashedEvents] = useState<HashedEvents>({});
   const [removing, setRemoving] = useState(false);
-  const { classes } = useStyles();
+  const { classes } = useEventStyles();
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [loading, setLoading] = useState(false);
 

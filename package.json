@@ -63,5 +63,10 @@
     "eslint-plugin-jest": "^27.1.4",
     "husky": "^8.0.1",
     "prettier": "^2.7.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint && npm run test"
+    }
   }
 }
