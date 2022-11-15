@@ -26,3 +26,9 @@ export interface Faq {
   title: string;
   description: string;
 }
+
+export interface EventItemProps {
+  event: Event;
+  edit: (event: Event) => void;
+  remove: (event: Event) => void;
+}

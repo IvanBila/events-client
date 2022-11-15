@@ -24,6 +24,7 @@ import { BASE_URL } from '../util/Config';
 import { Event, FormBody, HashedEvents } from '../Models';
 import { useForm } from '@mantine/form';
 import { useEventStyles } from '../util/Styles';
+import EventItem from '../components/EventItem';
 
 export default function Events() {
   const [value, setValue] = useState<Date | null>(null);
@@ -214,43 +215,12 @@ export default function Events() {
             {
               //@ts-ignore
               hashedEvents[value?.getDate()]?.map((event) => (
-                <Center key={event.id}>
-                  <Group
-                    position="apart"
-                    className={classes.item}
-                    noWrap
-                    spacing="xl"
-                  >
-                    <div>
-                      <Text>{event.title}</Text>
-                      <Text size="xs" color="dimmed">
-                        {event.description}
-                      </Text>
-                    </div>
-                    <Menu transition="pop" withArrow position="bottom-end">
-                      <Menu.Target>
-                        <ActionIcon>
-                          <IconDots size={16} stroke={1.5} />
-                        </ActionIcon>
-                      </Menu.Target>
-                      <Menu.Dropdown>
-                        <Menu.Item
-                          onClick={() => edit(event)}
-                          icon={<IconPencil size={16} stroke={1.5} />}
-                        >
-                          Edit
-                        </Menu.Item>
-                        <Menu.Item
-                          icon={<IconTrash size={16} stroke={1.5} />}
-                          color="red"
-                          onClick={() => remove(event)}
-                        >
-                          Delete
-                        </Menu.Item>
-                      </Menu.Dropdown>
-                    </Menu>
-                  </Group>
-                </Center>
+                <EventItem
+                  remove={remove}
+                  edit={edit}
+                  event={event}
+                  key={event.id}
+                />
               ))
             }
           </div>
