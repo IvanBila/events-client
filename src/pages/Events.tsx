@@ -20,10 +20,10 @@ import {
   Button,
 } from '@mantine/core';
 import { DateTime } from 'luxon';
-import { BASE_URL } from '../Config';
+import { BASE_URL } from '../util/Config';
 import { Event, FormBody, HashedEvents } from '../Models';
 import { useForm } from '@mantine/form';
-import { useEventStyles } from '../Styles';
+import { useEventStyles } from '../util/Styles';
 
 export default function Events() {
   const [value, setValue] = useState<Date | null>(null);

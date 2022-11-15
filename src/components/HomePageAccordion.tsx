@@ -1,6 +1,6 @@
 import { Accordion, Container, Title } from '@mantine/core';
 import React from 'react';
-import { useHomePageAccordionStyles } from '../Styles';
+import { useHomePageAccordionStyles } from '../util/Styles';
 import { Faq } from '../Models';
 
 export default function HomePageAccordion({ faq }: { faq: Faq[] }) {

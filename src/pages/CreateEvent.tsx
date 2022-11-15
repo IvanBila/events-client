@@ -15,9 +15,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { IconArrowLeft } from '@tabler/icons';
-import { BASE_URL } from '../Config';
+import { BASE_URL } from '../util/Config';
 import { FormBody } from '../Models';
-import { useCreateEventStyles } from '../Styles';
+import { useCreateEventStyles } from '../util/Styles';
 
 export default function CreateEvent() {
   const { classes } = useCreateEventStyles();

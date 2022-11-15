@@ -13,9 +13,9 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { IconChevronRight } from '@tabler/icons';
 import { Link } from 'react-router-dom';
-import { faq } from '../Config';
+import { faq } from '../util/Config';
 import HomePageAccordion from '../components/HomePageAccordion';
-import { useHomePageStyles } from '../Styles';
+import { useHomePageStyles } from '../util/Styles';
 
 export default function Home() {
   const [opened, { toggle }] = useDisclosure(false);

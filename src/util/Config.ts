@@ -1,4 +1,4 @@
-import { Faq } from './Models';
+import { Faq } from '../Models';
 const BASE_URL = process.env.BASE_URL || 'http://localhost:8080';
 
 const links = [

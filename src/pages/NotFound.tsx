@@ -1,7 +1,7 @@
 import { Title, Text, Button, Container, Group } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import React from 'react';
-import { useNotFoundStyles } from '../Styles';
+import { useNotFoundStyles } from '../util/Styles';
 
 export default function NotFoundTitle() {
   const { classes } = useNotFoundStyles();
