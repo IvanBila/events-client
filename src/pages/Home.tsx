@@ -50,12 +50,14 @@ export default function Home() {
             </span>
           </Center>
           <Group spacing={5} className={classes.links}>
-            <a key="sign-in" href="/sign-in" className={cx(classes.link)}>
+            <Link className={cx(classes.link)} to="/sign-in">
               Sign in
-            </a>
-            <Button radius="xl" sx={{ height: 30 }}>
-              Sign up
-            </Button>
+            </Link>
+            <Link to="/sign-up">
+              <Button radius="xl" sx={{ height: 30 }}>
+                Sign up
+              </Button>
+            </Link>
           </Group>
           <Burger
             opened={opened}
